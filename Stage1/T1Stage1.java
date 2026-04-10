@@ -19,10 +19,19 @@ public class T1Stage1 {
         }
         Scanner confFile = new Scanner(new File(args[0]));
         Scanner movFile = new Scanner(new File(args[1]));
-        
+
+        // Crea output.csv
+        PrintStream outputFile = new PrintStream(new File("output.csv"));
+
         T1Stage1 stage = new T1Stage1();
-        stage.setupSimulator(confFile);  
-        stage.runSimulation(movFile, System.out); 
+        stage.setupSimulator(confFile);
+
+        // Pasar outputFile en lugar de System.out
+        stage.runSimulation(movFile, outputFile);
+
+        confFile.close();
+        movFile.close();
+        outputFile.close();
     }
 
     public void setupSimulator(Scanner in) {  
