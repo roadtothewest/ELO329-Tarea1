@@ -1,0 +1,12 @@
+3
+Pedro 2 1
+3.4 10.6
+maleta 5.0 7.8 mochila 12.6 1.2
+30.5 90.4
+Juan 1 0
+500.1 63
+llaves 30.1 30.8
+Diego 2 1
+305 35
+llaves 0.1 0.1 mochila 40.5 43.1
+-21 31.0
