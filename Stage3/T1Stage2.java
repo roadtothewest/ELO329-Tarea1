@@ -28,6 +28,7 @@ public class T1Stage2 {
         outputFile.close();
     }
     public void setupSimulator(Scanner in) {  // create objects from file
+        in.useLocale(Locale.US);
         int personNumber = in.nextInt();
         for (int i = 0; i < personNumber; i++)
             setupPersonEquipment(in);

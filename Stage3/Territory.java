@@ -34,7 +34,7 @@ public class Territory {  // Piece of land where cellulars, tags, and tablets ar
 
 public Tablet getTablet(String ownerName) {
         for (Tablet tab : tablets)
-            if (tab.getOwnerName().equals(ownerName)) return cell;
+            if (tab.getOwnerName().equals(ownerName)) return tab;
         return null;
     }
 
