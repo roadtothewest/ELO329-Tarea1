@@ -3,7 +3,10 @@ public class Tablet extends Equipo {
         super(owner, _x, _y);
         esTablet = true;
     }
-    
+    Viewer view = new Viewer();
+    public void comandoFindMy(ETNube nube) {
+        view.verFindMy(nube, ownerName);
+    }
     //public String getHeader() {
       //...
     //}
