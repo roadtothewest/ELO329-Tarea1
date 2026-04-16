@@ -25,7 +25,7 @@ public class Equipo {
     //public String getState() {
       // ...
     //}
-    protected  String ownerName;
+    protected final String ownerName;
     protected float x,y;
     boolean esTablet = false;
 

@@ -1,7 +1,7 @@
-Diego.tablet FindMy
 Juan.celular 0.5 -0.8
 Juan.llaves 1 2.0
-Diego.tablet -5 -1
+Diego.tablet -0.6 -0.9
 Pedro.celular 4 4
 Juan.celular FindMy
-Diego.tablet FindMy
+Diego.celular FindMy
+Diego.tablet 7 7

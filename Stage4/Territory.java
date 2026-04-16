@@ -48,6 +48,22 @@ public Tablet getTablet(String ownerName) {
         return null; // Si no lo encuentra
     }
 
+    public void forEachTabletTryToReportLocation() {
+        for (Tablet tab : tablets) {
+            Cellular cell = findNearByCellularForTablet(tab);
+            if (cell != null) {
+                cell.reportTabletLocation(tab);
+            }
+        }
+    }
+
+    private Cellular findNearByCellularForTablet(Tablet tab) {
+        for (Cellular cell : cellulars) {
+            if (tab.isWithinRange(cell)) return cell;
+        }
+        return null;
+    }
+
     private ArrayList<Cellular> cellulars = new ArrayList<Cellular>();
     private ArrayList<EloTelTag> tags = new ArrayList<EloTelTag>();
     private ArrayList<Tablet> tablets = new ArrayList<Tablet>();

@@ -1,6 +1,6 @@
 3
 Pedro 2 1
-5 5
+3.4 10.6
 maleta 5.0 7.8 mochila 12.6 1.2
 30.5 90.4
 Juan 1 0
