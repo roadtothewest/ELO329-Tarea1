@@ -1,7 +1,7 @@
 # Variables
 JC = javac
 JVM = java
-MAIN = T1Stage2
+MAIN = SimuladorTest
 CONFIG = config.txt
 MOVE = move.txt
 
