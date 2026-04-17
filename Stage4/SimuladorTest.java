@@ -1,146 +1,173 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Locale;
 
 public class SimuladorTest {
-    private int step = 0;
-    private Territory territory;
-    private ETNube nube;
-
-    public SimuladorTest() {
+    SimuladorTest() {
         territory = new Territory();
         nube = new ETNube();
     }
-
     public static void main (String args[]) throws IOException {
+                                // throws exception to avoid catching
+                                // exception in the program
         if (args.length != 2) {
             System.out.println("Usage: java SimuladorTest <configFile> <moveFile>");
             System.exit(-1);
         }
-        
-        // 1. LOCALE GLOBAL: Soluciona el problema de los decimales de raíz para ambos archivos.
         Scanner confFile = new Scanner(new File(args[0]));
         confFile.useLocale(Locale.US);
-        
         Scanner movFile = new Scanner(new File(args[1]));
         movFile.useLocale(Locale.US);
-        
         SimuladorTest stage = new SimuladorTest();
         PrintStream outputFile = new PrintStream(new File("output.csv"));
-        
         stage.setupSimulator(confFile);
         stage.runSimulation(movFile, outputFile);
-        
         confFile.close();
         movFile.close();
         outputFile.close();
     }
-
-    public void setupSimulator(Scanner in) {
+    public void setupSimulator(Scanner in) {  // create objects from file
         int personNumber = in.nextInt();
-        for (int i = 0; i < personNumber; i++) {
+        for (int i = 0; i < personNumber; i++)
             setupPersonEquipment(in);
-        }
     }
-
     private void setupPersonEquipment(Scanner in){
+        Cellular cellular;
+        float x, y;
+
         String personName = in.next();
         int tagNumber = in.nextInt();
-        boolean isThereTablet = in.nextInt() == 1;
-        
-        float x = in.nextFloat();
-        float y = in.nextFloat();
-        
-        Cellular cellular = new Cellular(personName, x, y, nube);
+        boolean isThereTablet= in.nextInt()==1;
+        x = in.nextFloat(); // cellular's location
+        y = in.nextFloat();
+        cellular = new Cellular(personName, x, y, nube);
         territory.addCellular(cellular);
         nube.updateLocation(personName, "celular", x, y);
-        
-        for (int j = 0; j < tagNumber; j++) {
+        for (int j = 0; j < tagNumber; j++)
            setupEloTags(in, personName);
-        }
-           
         if (isThereTablet) {
-            setupTablet(in, personName); // 2. INTEGRADO: Ya no salta la línea, ahora la lee.
+            setupTablet(in,personName);
+           // in.nextFloat(); in.nextFloat();  // skip tablet's location
         }
     }
 
     private void setupEloTags(Scanner in, String personName) {
+        EloTelTag tag;
+        float x, y;
         String tagName = in.next();
-        float x = in.nextFloat();
-        float y = in.nextFloat();
-        EloTelTag tag = new EloTelTag(personName, tagName, x, y);
+        x = in.nextFloat();
+        y = in.nextFloat();
+        tag = new EloTelTag(personName,tagName,x, y);
         territory.addTag(tag);
-        nube.updateLocation(personName, tagName, x, y);
+        nube.updateLocation(tag.getOwnerName(),tag.getName(), x, y);
     }
 
-    // 3. BUG CORREGIDO: Tu compañero había copiado y pegado variables del tag aquí.
-    private void setupTablet(Scanner in, String personName) {
-        float x = in.nextFloat();
-        float y = in.nextFloat();
-        Tablet tab = new Tablet(personName, x, y);
+
+private void setupTablet(Scanner in, String personName) {
+        Tablet tab;
+        float x, y;
+        x = in.nextFloat();
+        y = in.nextFloat();
+        tab = new Tablet(personName,x, y,nube);
         territory.addTab(tab);
-        nube.updateLocation(personName, "tablet", x, y);
+        nube.updateLocation(tab.getOwnerName(),"tablet", x, y);
     }
+
+
 
     public void runSimulation(Scanner in, PrintStream output) {
-        nube.printHeader(output);
+        in.useLocale(Locale.US);
+        nube.printHeader(output); // in this stage, print cloud's state
         nube.printState(output, step);
 
-        while (in.hasNext()) {
+        while (in.hasNextLine() && in.hasNext()) {
             step++;
-            String equipment = in.next();
+            String equipment = in.next(); // read person'a name . equipment's name
             String[] parts = equipment.split("\\.");
             String personName = parts[0];
             String equipmentName = parts[1];
             String action = in.next();
-            
-            if (action.equals("FindMy")) {
-                procesarComandoFindMy(personName, equipmentName);
-            } else {
+            if (!action.equals("FindMy")) {
                 float deltaX = Float.parseFloat(action);
                 float deltaY = in.nextFloat();
-                procesarMovimiento(personName, equipmentName, deltaX, deltaY);
-            }
-            
-            territory.forEachTagTryToReportLocation();
-            territory.forEachTabletTryToReportLocation(); // Descomentar en Etapa 4
-            nube.printState(output, step);
-        }
-    }
 
-    // 5. MÉTODOS DE DELEGACIÓN: Aíslan la lógica de búsqueda y movimiento.
-    private void procesarMovimiento(String personName, String equipmentName, float deltaX, float deltaY) {
-        if (equipmentName.equals("celular")) {
-            Cellular cell = territory.getCellular(personName);
-            if (cell != null) {
-                cell.move(deltaX, deltaY);
-                nube.updateLocation(personName, "celular", cell.getX(), cell.getY());
-            }
-        } else if (equipmentName.equals("tablet")) {
-            Tablet tab = territory.getTablet(personName);
-            if (tab != null) {
-                tab.move(deltaX, deltaY);
-                // Nota: Los tablets reportan vía celular cercano, no directo.
-            }
-        } else {
-            EloTelTag tag = territory.getTag(personName, equipmentName);
-            if (tag != null) {
-                tag.move(deltaX, deltaY);
-            }
-        }
-    }
 
-    private void procesarComandoFindMy(String personName, String equipmentName) {
-        if (equipmentName.equals("celular")) {
-            Cellular cell = territory.getCellular(personName);
-            if (cell != null) {
-                cell.comandoFindMy();
+switch(equipmentName){
+
+    case "celular" ->{  
+        
+         Cellular cell = territory.getCellular(personName);
+                    if (cell != null) {
+                        cell.move(deltaX, deltaY);
+                        // Le avisamos a la nube que el celular se movió
+                        nube.updateLocation(personName, "celular", cell.getX(), cell.getY());
+                    }
+}
+
+
+ case "tablet" ->{  
+    
+
+Tablet tab = territory.getTablet(personName);
+                    if (tab != null) {
+                        tab.move(deltaX, deltaY);
+                        // Le avisamos a la nube que el celular se movió
+                        //nube.updateLocation(personName, "tablet", tab.getX(), tab.getY());
+                    }
+
+}
+
+
+
+    default ->{  
+        
+         EloTelTag tag = territory.getTag(personName, equipmentName);
+                    if (tag != null) { // ¡Esto evita que el programa se caiga al leer un tablet!
+                        tag.move(deltaX, deltaY);
+                    }
+    }
+}
+territory.forEachTagTryToReportLocation();
+                nube.printState(output, step);
+
+/*
+
+
+                if (equipmentName.equals("celular")) {
+                    Cellular cell = territory.getCellular(personName);
+                    if (cell != null) {
+                        cell.move(deltaX, deltaY);
+                        // Le avisamos a la nube que el celular se movió
+                        nube.updateLocation(personName, "celular", cell.getX(), cell.getY());
+                    }
+                } else{ 
+                    EloTelTag tag = territory.getTag(personName, equipmentName);
+                    if (tag != null) { // ¡Esto evita que el programa se caiga al leer un tablet!
+                        tag.move(deltaX, deltaY);
+                    }
+                }
+                territory.forEachTagTryToReportLocation();
+                nube.printState(output, step);
+
+
+                */
+            } else{
+                if(equipmentName.equals( "celular")){  
+                if (territory.getCellular(personName) != null)
+            territory.getCellular(personName).comandoFindMy();}
+
+                if(equipmentName.equals("tablet")){
+
+                if(territory.getTablet(personName) != null)
+                territory.getTablet(personName).comandoFindMy();}
+                
             }
-        } else if (equipmentName.equals("tablet")) {
-            Tablet tab = territory.getTablet(personName);
-            if (tab != null) tab.comandoFindMy(nube);
         }
     }
+    private int step=0;
+    private Territory territory;  // it knows all the equipments and checks cellular nearby tags.
+    private ETNube nube;
 }
