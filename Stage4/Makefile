@@ -7,8 +7,7 @@ MOVE = move.txt
 
 # Regla por defecto: compila todo
 all:
-	$(JC) *.java
-
+	$(JC) *.java 
 # Regla para ejecutar (rótulo "run" exigido por la tarea)
 run: all
 	$(JVM) $(MAIN) $(CONFIG) $(MOVE)
