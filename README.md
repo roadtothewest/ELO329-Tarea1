@@ -6,23 +6,22 @@ Este proyecto simula el movimiento de dispositivos localizadores (EloTelTags) ba
 
 Para facilitar el desarrollo y cumplimiento de las normas de entrega, se utiliza un `Makefile` en cada etapa del proyecto.
 
-### 1. Compilación
+### 1. Compilación y ejecución
 Para compilar todas las clases del proyecto (`.java`) y generar los archivos ejecutables (`.class`):
 make
 
-Para correr la simulación utilizando los archivos de prueba predeterminados (config.txt y move.txt):
+Para ejecutar la simulación utilizando los archivos de prueba predeterminados (config.txt y move.txt):
 make run
 
 Para borrar los archivos binarios generados y mantener la carpeta limpia:
 make clean
-### 2. Ejecución
 
-### 3. Archivos
+### 2. Archivos
 Se presentan carpetas la cuales contienen los archivos correspondientes a cada etapa:
 #### Stage1:
 - T1Stage1.java: contiene la función main la cual genera un archivo de salida con la posición de cada tag dada una entrada.
-- EloTelTag.java:
-- Territory.java:
+- EloTelTag.java
+- Territory.java
 - config.txt y move.txt: archivos de entrada
 - output.csv: archivo de salida
 - Makefile
@@ -52,7 +51,7 @@ Se presentan carpetas la cuales contienen los archivos correspondientes a cada e
 - Makefile
 
 #### Stage4: 
-- SimuladorTest.java: contiene la función main
+- SimuladorTest.java: contiene la función main con todas las funcionalidades de las etapas anteriores
 - EloTelTag.java
 - Territory.java
 - Celullar.java
