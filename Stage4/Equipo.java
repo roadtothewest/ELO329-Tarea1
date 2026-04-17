@@ -19,14 +19,21 @@ public class Equipo {
         return ownerName;
     }
 
+
+    public boolean isWithinRange(Cellular cell) {
+        double distance = Math.sqrt(Math.pow(this.x - cell.getX(), 2) + Math.pow(this.y - cell.getY(), 2));
+        return distance <= TRACKING_RANGE;
+    }
+
     //public String getHeader() {
       //..    
     //}
     //public String getState() {
       // ...
     //}
-    protected final String ownerName;
+    protected  String ownerName;
     protected float x,y;
     boolean esTablet = false;
+    private static final float TRACKING_RANGE = 10;
 
 }

@@ -21,8 +21,16 @@ public class Territory {  // Piece of land where cellulars, tags, and tablets ar
                 cell.reportTagLocation(tag);
             }
         }
+
+
+         for (Tablet tab : tablets) {
+            Cellular cell = findNearByCellular(tab);
+            if (cell != null) {
+                cell.reportTabLocation(tab);
+            }
+        }
     }
-    private Cellular findNearByCellular(EloTelTag tag) {
+    private Cellular findNearByCellular(Equipo tag) {
         for (Cellular cell : cellulars) if (tag.isWithinRange(cell)) return cell;
         return null;
     }
@@ -46,22 +54,6 @@ public Tablet getTablet(String ownerName) {
             }
         }
         return null; // Si no lo encuentra
-    }
-
-    public void forEachTabletTryToReportLocation() {
-        for (Tablet tab : tablets) {
-            Cellular cell = findNearByCellularForTablet(tab);
-            if (cell != null) {
-                cell.reportTabletLocation(tab);
-            }
-        }
-    }
-
-    private Cellular findNearByCellularForTablet(Tablet tab) {
-        for (Cellular cell : cellulars) {
-            if (tab.isWithinRange(cell)) return cell;
-        }
-        return null;
     }
 
     private ArrayList<Cellular> cellulars = new ArrayList<Cellular>();
